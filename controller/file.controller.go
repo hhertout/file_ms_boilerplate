@@ -1,10 +1,9 @@
 package controller
 
 import (
+	"github.com/eco-challenge/service"
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"path/filepath"
-	"strings"
 )
 
 func Ping(c *gin.Context) {
@@ -22,16 +21,14 @@ func UploadFile(c *gin.Context) {
 		return
 	}
 
-	filename := strings.Replace(file.Filename, " ", "_", -1)
-	filePath := filepath.Base(".") + "/upload/" + filename
-
-	err = c.SaveUploadedFile(file, filePath)
+	_, err = service.NewUploadManager().Save(file)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"message": err,
 		})
 		return
 	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"message": "upload successfully",
 	})

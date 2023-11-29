@@ -1,4 +1,4 @@
-FROM golang
+FROM golang:1.20-alpine
 
 WORKDIR /app
 
@@ -7,6 +7,8 @@ COPY go.sum .
 
 RUN go mod download
 
+RUN go install github.com/mitranim/gow@latest
+
 COPY . .
 
-CMD ["go", "run", "."]
+CMD ["gow", "run", "."]
