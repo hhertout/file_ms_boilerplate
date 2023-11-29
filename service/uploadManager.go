@@ -11,8 +11,8 @@ import (
 )
 
 type FileManager interface {
-	Save()
-	Get()
+	Save(file *multipart.FileHeader) (string, error)
+	Get(filename string) ([]byte, error)
 }
 
 type UploadManager struct {
