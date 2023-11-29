@@ -6,9 +6,10 @@ import (
 )
 
 func Provider() *gin.Engine {
-	r := gin.New()
+	r := gin.Default()
 
 	r.GET("/ping", controller.Ping)
+	r.POST("/upload", controller.UploadFile)
 
 	return r
 }
