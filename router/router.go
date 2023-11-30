@@ -9,6 +9,8 @@ func Provider() *gin.Engine {
 	r := gin.Default()
 
 	r.GET("/ping", controller.Ping)
+	r.GET("/download", controller.GetFile)
+
 	r.POST("/upload", controller.UploadFile)
 
 	return r

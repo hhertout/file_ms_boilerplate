@@ -54,6 +54,10 @@ func (u *UploadManager) Get(filename string) ([]byte, error) {
 	return file, nil
 }
 
+func (u *UploadManager) GetBasePath() string {
+	return u.basePath
+}
+
 func (u *UploadManager) formatFileName(filename string) string {
 	return strings.Replace(filename, " ", "_", -1)
 }
