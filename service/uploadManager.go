@@ -25,7 +25,7 @@ func NewUploadManager() *UploadManager {
 	}
 }
 
-func (u *UploadManager) Save(file *multipart.FileHeader) (string, error) {
+func (u UploadManager) Save(file *multipart.FileHeader) (string, error) {
 	filePath := u.basePath + u.formatFileName(file.Filename)
 	fileOpen, err := file.Open()
 	if err != nil {
@@ -45,7 +45,7 @@ func (u *UploadManager) Save(file *multipart.FileHeader) (string, error) {
 	return filePath, nil
 }
 
-func (u *UploadManager) Get(filename string) ([]byte, error) {
+func (u UploadManager) Get(filename string) ([]byte, error) {
 	filePath := u.basePath + filename
 	file, err := os.ReadFile(filePath)
 	if err != nil {
@@ -54,10 +54,10 @@ func (u *UploadManager) Get(filename string) ([]byte, error) {
 	return file, nil
 }
 
-func (u *UploadManager) GetBasePath() string {
+func (u UploadManager) GetBasePath() string {
 	return u.basePath
 }
 
-func (u *UploadManager) formatFileName(filename string) string {
+func (u UploadManager) formatFileName(filename string) string {
 	return strings.Replace(filename, " ", "_", -1)
 }
