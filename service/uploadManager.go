@@ -3,6 +3,7 @@ package service
 import (
 	"bytes"
 	"errors"
+	"github.com/eco-challenge/repository"
 	"io"
 	"mime/multipart"
 	"os"
@@ -16,12 +17,14 @@ type FileManager interface {
 }
 
 type UploadManager struct {
-	basePath string
+	basePath   string
+	repository repository.UploadRepository
 }
 
 func NewUploadManager() *UploadManager {
 	return &UploadManager{
 		filepath.Base(".") + "/upload/",
+		repository.NewUploadRepository(),
 	}
 }
 
@@ -42,6 +45,11 @@ func (u UploadManager) Save(file *multipart.FileHeader) (string, error) {
 	if err != nil {
 		return "", errors.New("failed to save file")
 	}
+
+	err = u.repository.SaveUploadFile(filePath)
+	if err != nil {
+		return "", err
+	}
 	return filePath, nil
 }
 
@@ -56,6 +64,10 @@ func (u UploadManager) Get(filename string) ([]byte, error) {
 
 func (u UploadManager) GetBasePath() string {
 	return u.basePath
+}
+
+func (u UploadManager) RegisterUpload() string {
+	return ""
 }
 
 func (u UploadManager) formatFileName(filename string) string {

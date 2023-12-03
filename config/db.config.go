@@ -6,12 +6,16 @@ import (
 	"os"
 )
 
-func GetDbConnection() (*sqlx.DB, error) {
-	db, err := sqlx.Connect("sqlite3", os.Getenv("DB_URL"))
+var DbPool *sqlx.DB
 
-	return db, err
+func GetDbConnection() {
+	var err error
+	DbPool, err = sqlx.Connect("sqlite3", os.Getenv("DB_URL"))
+	if err != nil {
+		panic("failed to connect to database")
+	}
 }
 
-func MakeMigration(db *sqlx.DB) {
-	db.MustExec(`CREATE TABLE IF NOT EXISTS file (id varchar(255) primary key not null, source text not null);`)
+func MakeMigration() {
+	DbPool.MustExec(`CREATE TABLE IF NOT EXISTS file (id varchar(255) primary key not null, source text not null);`)
 }

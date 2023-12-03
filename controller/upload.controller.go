@@ -20,6 +20,7 @@ func UploadFile(c *gin.Context) {
 		})
 		return
 	}
+	// TODO check file
 
 	_, err = service.NewUploadManager().Save(file)
 	if err != nil {

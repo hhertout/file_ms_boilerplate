@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"github.com/eco-challenge/config"
 	"github.com/eco-challenge/router"
 )
@@ -12,12 +11,8 @@ func main() {
 		panic("Failed to load env")
 	}
 
-	dbPool, err := config.GetDbConnection()
-	if err != nil {
-		fmt.Println(err)
-		panic("failed to connect to database")
-	}
-	config.MakeMigration(dbPool)
+	config.GetDbConnection()
+	config.MakeMigration()
 
 	r := router.Provider()
 	err = r.Run()
