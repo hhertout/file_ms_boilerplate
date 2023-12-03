@@ -20,9 +20,7 @@ func UploadFile(c *gin.Context) {
 		})
 		return
 	}
-	// TODO check file
-
-	_, err = service.NewUploadManager().Save(file)
+	id, err := service.NewUploadManager().Save(file, "common/")
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"message": err,
@@ -30,7 +28,8 @@ func UploadFile(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
+	c.JSON(http.StatusCreated, gin.H{
 		"message": "upload successfully",
+		"id":      id,
 	})
 }
