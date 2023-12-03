@@ -1,7 +1,6 @@
 package repository
 
 import (
-	"fmt"
 	"github.com/eco-challenge/config"
 	uuid2 "github.com/google/uuid"
 	"github.com/jmoiron/sqlx"
@@ -19,7 +18,6 @@ func NewUploadRepository() UploadRepository {
 
 func (u UploadRepository) SaveUploadFile(filePath string) error {
 	uuid := uuid2.NewString()
-	fmt.Println(u.db)
 	_, err := u.db.NamedExec("INSERT INTO file(id, source) VALUES (:uuid,:path)", map[string]interface{}{
 		"uuid": uuid,
 		"path": filePath,
