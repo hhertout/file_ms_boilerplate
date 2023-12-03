@@ -20,7 +20,7 @@ func GetFile(c *gin.Context) {
 		})
 		return
 	}
-	path, err := service.NewUploadManager().GetBasePath(body.Id)
+	path, err := service.NewFileManager().GetBasePath(body.Id)
 	if err != nil {
 		if os.Getenv("ENV") == "dev" {
 			c.JSON(http.StatusInternalServerError, gin.H{

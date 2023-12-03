@@ -11,4 +11,6 @@ RUN go install github.com/mitranim/gow@latest
 
 COPY . .
 
+# Run tests : go test ./tests
+
 CMD ["gow", "run", "."]
