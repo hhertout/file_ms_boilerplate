@@ -4,32 +4,27 @@ import (
 	"bytes"
 	"errors"
 	"github.com/eco-challenge/repository"
+	"github.com/google/uuid"
 	"io"
 	"mime/multipart"
 	"os"
 	"path/filepath"
-	"strings"
 )
 
-type FileManager interface {
-	Save(file *multipart.FileHeader) (string, error)
-	Get(filename string) ([]byte, error)
-}
-
-type UploadManager struct {
+type FileManager struct {
 	basePath   string
-	repository repository.UploadRepository
+	repository repository.FileRepository
 }
 
-func NewUploadManager() *UploadManager {
-	return &UploadManager{
+func NewUploadManager() *FileManager {
+	return &FileManager{
 		filepath.Base(".") + "/upload/",
-		repository.NewUploadRepository(),
+		repository.NewFileRepository(),
 	}
 }
 
-func (u UploadManager) Save(file *multipart.FileHeader) (string, error) {
-	filePath := u.basePath + u.formatFileName(file.Filename)
+func (u FileManager) Save(file *multipart.FileHeader, subDirectory string) (string, error) {
+	filePath := u.basePath + subDirectory + u.formatFileName(file.Filename)
 	fileOpen, err := file.Open()
 	if err != nil {
 		return "", errors.New("failed to open file")
@@ -53,7 +48,7 @@ func (u UploadManager) Save(file *multipart.FileHeader) (string, error) {
 	return filePath, nil
 }
 
-func (u UploadManager) Get(filename string) ([]byte, error) {
+func (u FileManager) Get(filename string) ([]byte, error) {
 	filePath := u.basePath + filename
 	file, err := os.ReadFile(filePath)
 	if err != nil {
@@ -62,14 +57,13 @@ func (u UploadManager) Get(filename string) ([]byte, error) {
 	return file, nil
 }
 
-func (u UploadManager) GetBasePath() string {
-	return u.basePath
+func (u FileManager) GetBasePath(id string) (string, error) {
+	path, err := u.repository.GetUploadedFileById(id)
+	return path, err
 }
 
-func (u UploadManager) RegisterUpload() string {
-	return ""
-}
-
-func (u UploadManager) formatFileName(filename string) string {
-	return strings.Replace(filename, " ", "_", -1)
+func (u FileManager) formatFileName(filename string) string {
+	id := uuid.New()
+	e := filepath.Ext(filename)
+	return id.String() + e
 }
