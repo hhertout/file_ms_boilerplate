@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"github.com/eco-challenge/config"
 	"github.com/eco-challenge/service"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -20,7 +21,13 @@ func UploadFile(c *gin.Context) {
 		})
 		return
 	}
-	id, err := service.NewFileManager().Save(file, []string{"image/jpg", "image/png"}, "common/")
+	if file == nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": "File is missing",
+		})
+		return
+	}
+	id, err := service.NewFileManager().Save(file, []string{config.MIME_TYPE.Jpg, config.MIME_TYPE.Png}, "common/")
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"message": err,

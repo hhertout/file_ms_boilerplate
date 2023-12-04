@@ -3,12 +3,16 @@ package main
 import (
 	"github.com/eco-challenge/config"
 	"github.com/eco-challenge/router"
+	"os"
 )
 
 func main() {
-	err := config.LoadEnv()
-	if err != nil {
-		panic("Failed to load env")
+	var err error
+	if os.Getenv("ENV") == "dev" {
+		err = config.LoadEnv()
+		if err != nil {
+			panic(err)
+		}
 	}
 
 	config.GetDbConnection()

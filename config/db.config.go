@@ -3,6 +3,7 @@ package config
 import (
 	"github.com/jmoiron/sqlx"
 	_ "github.com/mattn/go-sqlite3"
+	"log"
 	"os"
 )
 
@@ -12,6 +13,7 @@ func GetDbConnection() {
 	var err error
 	DbPool, err = sqlx.Connect("sqlite3", os.Getenv("DB_URL"))
 	if err != nil {
+		log.Println(err)
 		panic("failed to connect to database")
 	}
 }
