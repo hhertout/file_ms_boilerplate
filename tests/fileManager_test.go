@@ -40,7 +40,7 @@ func TestFileManager(t *testing.T) {
 			if err != nil {
 				t.Errorf("Failed to open test file, %s", err)
 			}
-			mime, err := f.GetMimeTypeFromMagicNumber(magicNumberBytes)
+			mime, err := f.CheckMimeType(magicNumberBytes)
 			if err != nil {
 				t.Errorf("Error raise by GetMimeTypeFromMagicNumber, %s", err)
 			}
