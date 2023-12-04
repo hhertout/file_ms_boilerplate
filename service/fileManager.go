@@ -27,7 +27,7 @@ func (u FileManager) Save(file *multipart.FileHeader, authorizedMimeType []strin
 	filePath := u.basePath + subDirectory + u.formatFileName(file.Filename)
 	fileOpen, err := file.Open()
 
-	magicNumber, err := u.GetMimeTypeFromMagicNumber(file)
+	magicNumber, err := u.GetMimeTypeFromFile(file)
 	isAuthorized := u.VerifyMimeType(magicNumber, authorizedMimeType)
 	if !isAuthorized {
 		return "", err
@@ -37,17 +37,6 @@ func (u FileManager) Save(file *multipart.FileHeader, authorizedMimeType []strin
 		return "", errors.New("failed to open file")
 	}
 	defer fileOpen.Close()
-
-	/*magicNumberBytes := make([]byte, 12)
-	if _, err := fileOpen.Read(magicNumberBytes); err != nil {
-		return "", err
-	}
-
-	magicNumber, err := u.GetMimeTypeFromMagicNumber(magicNumberBytes)
-	isAuthorized := u.VerifyMimeType(magicNumber, authorizedMimeType)
-	if !isAuthorized {
-		return "", err
-	}*/
 
 	destinationFile, err := os.Create(filePath)
 	if err != nil {
@@ -86,7 +75,7 @@ func (u FileManager) formatFileName(filename string) string {
 	return id.String() + e
 }
 
-func (u FileManager) GetMimeTypeFromMagicNumber(file *multipart.FileHeader) (string, error) {
+func (u FileManager) GetMimeTypeFromFile(file *multipart.FileHeader) (string, error) {
 	fileOpen, err := file.Open()
 	defer fileOpen.Close()
 
@@ -97,8 +86,10 @@ func (u FileManager) GetMimeTypeFromMagicNumber(file *multipart.FileHeader) (str
 	if _, err := fileOpen.Read(buffer); err != nil {
 		return "", err
 	}
+	return u.CheckMimeType(buffer)
+}
 
-	// TODO build constants for mime type
+func (u FileManager) CheckMimeType(buffer []byte) (string, error) {
 	if buffer[0] == 0xFF && buffer[1] == 0xD8 && buffer[2] == 0xFF {
 		return config.MIME_TYPE.Jpg, nil
 	} else if buffer[0] == 0x89 && buffer[1] == 0x50 && buffer[2] == 0x4E && buffer[3] == 0x47 {
