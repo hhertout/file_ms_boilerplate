@@ -1,7 +1,16 @@
 services:
   file:
-    build: dev.dockerfile
+    build:
+      context: .
+      dockerfile: dev.dockerfile
+    env_file:
+      - ./.env
     ports:
       - 8080:8080
     volumes:
       - .:/app
+      - db:/app/data
+      - upload:/app/upload
+volumes:
+  db:
+  upload:
