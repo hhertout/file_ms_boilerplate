@@ -37,4 +37,4 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Build
-        run: docker build -f dev.dockerfile .
+        run: docker build .

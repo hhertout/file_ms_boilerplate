@@ -2,7 +2,7 @@ services:
   file:
     build:
       context: .
-      dockerfile: dev.dockerfile
+      dockerfile: Dockerfile
     env_file:
       - ./.env
     ports:
