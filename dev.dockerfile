@@ -1,17 +1,21 @@
 FROM golang:1.20-alpine
 
 RUN apk update && apk upgrade
-RUN apk add --no-cache sqlite sqlite-libs build-base
-RUN sqlite3 --version
+RUN apk add  \
+    sqlite  \
+    sqlite-libs  \
+    build-base  \
+    make
+
+RUN go install github.com/cosmtrek/air@latest
 
 WORKDIR /app
 
-COPY go.mod .
+COPY . .
+
+RUN mkdir data
+RUN mkdir upload && cd upload && mkdir common
 
 RUN go mod download
 
-RUN go install github.com/mitranim/gow@latest
-
-COPY . .
-
-CMD ["gow", "run", "."]
+CMD ["make", "watch"]

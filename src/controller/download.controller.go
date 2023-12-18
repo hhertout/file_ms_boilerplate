@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"github.com/eco-challenge/service"
+	"github.com/eco-challenge/src/service"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"os"

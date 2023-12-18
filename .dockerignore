@@ -1,5 +1,7 @@
 /data
 /build
+/tmp
+/upload
 .idea
 .env
 .env.sample
