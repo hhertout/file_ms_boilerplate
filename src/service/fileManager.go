@@ -2,8 +2,8 @@ package service
 
 import (
 	"errors"
-	"github.com/eco-challenge/config"
-	"github.com/eco-challenge/repository"
+	"github.com/eco-challenge/src/config"
+	"github.com/eco-challenge/src/repository"
 	"github.com/google/uuid"
 	"io"
 	"mime/multipart"
@@ -64,7 +64,7 @@ func (u FileManager) Get(filename string) ([]byte, error) {
 	return file, nil
 }
 
-func (u FileManager) GetBasePath(id string) (string, error) {
+func (u FileManager) GetFromPath(id string) (string, error) {
 	path, err := u.repository.GetUploadedFileById(id)
 	return path, err
 }

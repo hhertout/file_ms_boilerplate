@@ -1,13 +1,13 @@
 package repository
 
 import (
-	"github.com/eco-challenge/config"
+	"database/sql"
+	"github.com/eco-challenge/src/config"
 	uuid2 "github.com/google/uuid"
-	"github.com/jmoiron/sqlx"
 )
 
 type FileRepository struct {
-	db *sqlx.DB
+	db *sql.DB
 }
 
 func NewFileRepository() FileRepository {
@@ -18,10 +18,7 @@ func NewFileRepository() FileRepository {
 
 func (u FileRepository) SaveUploadFile(filePath string) (string, error) {
 	uuid := uuid2.NewString()
-	_, err := u.db.NamedExec("INSERT INTO file(id, source) VALUES (:uuid,:path)", map[string]interface{}{
-		"uuid": uuid,
-		"path": filePath,
-	})
+	_, err := u.db.Exec("INSERT INTO file(id, source) VALUES ($1,$2)", uuid, filePath)
 	if err != nil {
 		return "", err
 	}
@@ -34,16 +31,14 @@ func (u FileRepository) GetUploadedFileById(id string) (string, error) {
 	}
 
 	source := Source{}
-	rows, err := u.db.NamedQuery("SELECT source FROM file WHERE id=:id LIMIT 1", map[string]interface{}{
-		"id": id,
-	})
+	rows, err := u.db.Query("SELECT source FROM file WHERE id=$1 LIMIT 1", id)
 
 	if err != nil {
 		return "", err
 	}
 
 	for rows.Next() {
-		err = rows.StructScan(&source)
+		err = rows.Scan(&source.Source)
 		if err != nil {
 			return "", err
 		}

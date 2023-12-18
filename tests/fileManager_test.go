@@ -1,7 +1,7 @@
 package tests
 
 import (
-	"github.com/eco-challenge/service"
+	"github.com/eco-challenge/src/service"
 	"os"
 	"testing"
 )

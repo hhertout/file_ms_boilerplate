@@ -6,11 +6,6 @@ services:
     env_file:
       - ./.env
     ports:
-      - 8080:8080
+      - 4568:4568
     volumes:
       - .:/app
-      - db:/app/data
-      - upload:/app/upload
-volumes:
-  db:
-  upload:

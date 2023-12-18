@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"github.com/eco-challenge/service"
+	"github.com/eco-challenge/src/service"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"os"
@@ -20,7 +20,7 @@ func GetFile(c *gin.Context) {
 		})
 		return
 	}
-	path, err := service.NewFileManager().GetBasePath(body.Id)
+	path, err := service.NewFileManager().GetFromPath(body.Id)
 	if err != nil {
 		if os.Getenv("ENV") == "dev" {
 			c.JSON(http.StatusInternalServerError, gin.H{
