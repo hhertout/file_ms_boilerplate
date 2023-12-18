@@ -29,4 +29,11 @@ jobs:
         with:
           go-version: 1.20.3
       - name: Build
-        run: go build
+        run: go build -o main cmd/api/main.go
+
+  docker_build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Build
+        run: docker build -f dev.dockerfile .
