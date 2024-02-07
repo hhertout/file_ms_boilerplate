@@ -16,5 +16,7 @@ func Provider() *gin.Engine {
 
 	r.POST("/upload", controller.UploadFile)
 
+	r.POST("/export/json", controller.ExportJson)
+
 	return r
 }
