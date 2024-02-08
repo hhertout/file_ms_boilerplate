@@ -28,3 +28,26 @@ func ExportJson(c *gin.Context) {
 	c.Header("Content-Disposition", "attachment; filename=export.json")
 	c.Data(http.StatusOK, "application/json", j)
 }
+
+func ExportXml(c *gin.Context) {
+	var body interface{}
+	if err := c.BindJSON(&body); err != nil {
+		c.JSON(500, gin.H{
+			"message": "Failed to parse Body",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	j, err := service.NewExporter().JsonToXml(body)
+	if err != nil {
+		c.JSON(500, gin.H{
+			"message": "Failed create xml content",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	c.Header("Content-Disposition", "attachment; filename=export.xml")
+	c.Data(http.StatusOK, "application/xml", []byte(j))
+}

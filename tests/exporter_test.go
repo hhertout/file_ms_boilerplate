@@ -7,7 +7,7 @@ import (
 )
 
 type TestJson struct {
-	Foo string `json:"foo"`
+	Foo string `json:"foo" xml:"foo"`
 }
 
 func TestExporterJson(t *testing.T) {
@@ -27,6 +27,22 @@ func TestExporterJson(t *testing.T) {
 
 		if string(decodedData) != string(expected) {
 			t.Errorf("Data don't match. Expect : %s, Result : %s", expected, string(decodedData))
+		}
+	})
+
+	t.Run("xml test", func(t *testing.T) {
+		exporter := service.NewExporter()
+		jsonData := TestJson{
+			Foo: "bar",
+		}
+		decodedData, err := exporter.JsonToXml(jsonData)
+		if err != nil {
+			t.Errorf("Failed to parse to json: %v", err)
+		}
+		expected := "<foo>bar</foo>"
+
+		if decodedData != expected {
+			t.Errorf("Data don't match. Expect : %s, Result : %s", expected, decodedData)
 		}
 	})
 }
